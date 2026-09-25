@@ -11,10 +11,7 @@ async function stamp(side) {
     rpc(url, "eth_chainId"), rpc(url, "eth_blockNumber"),
     rpc(url, "eth_getBlockByNumber", ["0x" + FORK.toString(16), false])
   ]);
-  return {
-    side, url, chainId: parseInt(cid, 16), block: parseInt(block, 16),
-    forkHash: fork && fork.hash, utc: new Date().toISOString()
-  };
+  return { side, url, chainId: parseInt(cid, 16), block: parseInt(block, 16), forkHash: fork && fork.hash, utc: new Date().toISOString() };
 }
 async function logsFor(url, filter) {
   try { return await rpc(url, "eth_getLogs", [filter]); }
@@ -56,23 +53,24 @@ function renderTape(pack) {
   host.innerHTML = pack.vest.map(v => {
     const ah = hashes(v.alpha, 3).map(h => `<a target="_blank" rel="noopener" href="${explorerFor(alphaUrl())}/tx/${h}">${short(h)}</a>`).join(" ");
     const bh = hashes(v.beta, 3).map(h => `<a target="_blank" rel="noopener" href="${explorerFor(betaUrl())}/tx/${h}">${short(h)}</a>`).join(" ");
-    return `<p><strong>${v.contract}</strong><br>Branch A events ${Array.isArray(v.alpha) ? v.alpha.length : v.alpha.error}<br>${ah || "—"}<br>Community events ${Array.isArray(v.beta) ? v.beta.length : v.beta.error}<br>${bh || "—"}</p>`;
+    return `<p><strong>${v.contract}</strong><br>Dashboard Side events ${Array.isArray(v.alpha) ? v.alpha.length : v.alpha.error}<br>${ah || "—"}<br>Mainnet Side events ${Array.isArray(v.beta) ? v.beta.length : v.beta.error}<br>${bh || "—"}</p>`;
   }).join("");
   if (flow) {
-    flow.innerHTML = `
-      <div class="flow">
-        <div class="node muted">Dashboard Purchase / Bonus<br><small>off-chain — not in this tape</small></div>
-        <div class="arrow">dotted</div>
-        <div class="row">
-          <div class="node">Branch A<br>native ${typeof pack.nativeA === "string" && pack.nativeA.startsWith("0x") ? wei(pack.nativeA) : pack.nativeA}<br>vesting events ${aLogs}</div>
-          <div class="node">Community<br>native ${typeof pack.nativeB === "string" && pack.nativeB.startsWith("0x") ? wei(pack.nativeB) : pack.nativeB}<br>vesting events ${bLogs}</div>
-        </div>
-        <div class="arrow">on-chain where logs exist</div>
-        <div class="node">Wallet ${short(pack.address)}</div>
-        <div class="arrow">MBSTAC token ${pack.codeB ? "present on Community RPC" : "no bytecode here"}</div>
-        <div class="node">MBSTAC in ${inN} / out ${outN}<br>balance ${pack.tokenBal && String(pack.tokenBal).startsWith("0") || /^
-?\d+$/.test(pack.tokenBal) ? wei(pack.tokenBal) : pack.tokenBal}</div>
-      </div>`;
+    const nA = typeof pack.nativeA === "string" && pack.nativeA.startsWith("0x") ? wei(pack.nativeA) : pack.nativeA;
+    const nB = typeof pack.nativeB === "string" && pack.nativeB.startsWith("0x") ? wei(pack.nativeB) : pack.nativeB;
+    const tok = /^\d+$/.test(String(pack.tokenBal || "")) ? wei(pack.tokenBal) : pack.tokenBal;
+    flow.innerHTML = `<div class="flow">
+      <div class="node muted">Shop / dashboard records<br><small>off-chain unless you paste a CSV</small></div>
+      <div class="arrow">dotted</div>
+      <div class="row">
+        <div class="node">Dashboard Side<br>native ${nA}<br>vesting events ${aLogs}</div>
+        <div class="node">Mainnet Side<br>native ${nB}<br>vesting events ${bLogs}</div>
+      </div>
+      <div class="arrow">on-chain where logs exist</div>
+      <div class="node">Wallet ${short(pack.address)}</div>
+      <div class="arrow">MBSTAC ${pack.codeB ? "present on Mainnet Side RPC" : "no bytecode on this RPC"}</div>
+      <div class="node">MBSTAC in ${inN} / out ${outN}<br>balance ${tok}</div>
+    </div>`;
   }
   window.MBSTAC_FOOTPRINT = pack;
 }
@@ -84,7 +82,7 @@ async function runTape() {
   try {
     const pack = await collectTape(a);
     renderTape(pack);
-    if (st) st.textContent = "Collected " + pack.collectedAt + ". Native full-history arrows need an explorer index; this tape is vesting + MBSTAC logs + current balances.";
+    if (st) st.textContent = "Collected " + pack.collectedAt + ".";
     showPane("lab");
   } catch (e) { if (st) st.textContent = e.message || String(e); }
 }
