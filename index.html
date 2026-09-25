@@ -3,10 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>MBSTAC — rebrand preview</title>
+<title>MBSTAC preview</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700&family=IBM+Plex+Mono:wght@500;700&display=swap" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Antonio:wght@700&family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
 <link href="css/app.css" rel="stylesheet">
 </head>
 <body>
@@ -15,136 +16,119 @@
     <a class="brand" href="index.html"><span class="mark">M</span><div><strong>MBSTAC</strong><small>Rebrand preview</small></div></a>
     <button type="button" class="icon-btn" id="siteMenuBtn" aria-label="Menu"><i class="fa fa-bars"></i></button>
     <nav id="siteMenu" class="menu" hidden>
-      <a href="#" data-jump="read"><i class="fa fa-code-fork"></i> Read</a>
-      <a href="#" data-jump="file"><i class="fa fa-coins"></i> File</a>
-      <a href="#" data-jump="lab"><i class="fa fa-bar-chart"></i> Lab</a>
-      <a href="#" data-jump="faq"><i class="fa fa-question-circle"></i> FAQ</a>
-      <a href="https://mbasestack.com/#mbasestack-utility-token" target="_blank" rel="noopener"><i class="fa fa-external-link"></i> Official site</a>
+      <a href="#" data-jump="read">Read</a>
+      <a href="#" data-jump="file">File</a>
+      <a href="#" data-jump="lab">Trace</a>
+      <a href="#" data-jump="miner">Miners</a>
+      <a href="https://mbasestack.com/#mbasestack-utility-token" target="_blank" rel="noopener">Official site</a>
     </nav>
   </header>
 
   <div class="notice">
-    <strong>This is not the official dApp.</strong>
-    Layout test by psycho-v1 with the MBSTAC operator.
-    Do not mint from this page. Live service: <a href="https://mbasestack.com/#mbasestack-utility-token" target="_blank" rel="noopener">mbasestack.com</a>.
-    Labels below are for this preview: Dashboard Side = BDAGScan / Works RPCs; Mainnet Side = the other public RPC list.
+    <strong>Not the official dApp.</strong>
+    Test layout by psycho-v1 with the MBSTAC operator. Do not mint here.
+    Use <a href="https://mbasestack.com/#mbasestack-utility-token" target="_blank" rel="noopener">mbasestack.com</a>.
+    Dashboard Side = BDAGScan list. Mainnet Side = the other public RPCs. Labels are for this preview only.
   </div>
 
   <section class="pane on" data-pane="read">
     <div class="card">
-      <div class="kicker">Read</div>
-      <h2>Compare Dashboard Side and Mainnet Side</h2>
+      <div class="row-help"><div class="kicker">Read</div><button type="button" class="q" data-help="help-read">?</button></div>
+      <div id="help-read" class="help" hidden>Pick one RPC on each side, paste or connect a wallet, then tap Compare. Each figure is that server, at that moment. The two sides can disagree after block 316,002.</div>
+      <h2>Two sides, one address</h2>
       <label>Mainnet Side RPC</label>
       <select id="rpcSelect" class="form-select"></select>
-      <div id="rpcHealth" class="rpc-health wait">Checking...</div>
-      <label class="mt-3">Dashboard Side RPC</label>
+      <div id="rpcHealth" class="hint wait">Checking...</div>
+      <label>Dashboard Side RPC</label>
       <select id="alphaRpcSelect" class="form-select"></select>
-      <div id="alphaRpcHealth" class="rpc-health wait">Checking...</div>
+      <div id="alphaRpcHealth" class="hint wait">Checking...</div>
     </div>
     <div class="card">
-      <h3>Choose a BDAG wallet</h3>
-      <label for="compare-wallet-address">Wallet address</label>
-      <input id="compare-wallet-address" class="form-control" placeholder="0x…" autocomplete="off" spellcheck="false">
-      <button type="button" class="btn-mint mt-3" onclick="connectWallet()"><i class="fa fa-wallet"></i> Connect BDAG Dashboard Wallet</button>
-      <button type="button" class="btn-ghost mt-2" onclick="compareBalances()">Compare Balances</button>
-      <button type="button" class="btn-ghost mt-2" onclick="compareClaims()">Compare Claims</button>
-      <button type="button" class="btn-ghost mt-2" onclick="runTape()">Build event tape</button>
-      <button type="button" class="btn-ghost mt-2" onclick="saveWatch()">Save address on this device</button>
+      <div class="row-help"><h3 class="m-0">Wallet</h3><button type="button" class="q" data-help="help-wallet">?</button></div>
+      <div id="help-wallet" class="help" hidden>On a phone open this page inside MetaMask, Trust, Binance Web3, or similar. On a computer the list below shows every injected wallet. We only ask the wallet for an address and to use chain 1404.</div>
+      <label>Address</label>
+      <input id="compare-wallet-address" class="form-control hash" placeholder="0x…" autocomplete="off" spellcheck="false">
+      <div id="walletList" class="wallets"></div>
+      <button type="button" class="btn-mint" onclick="connectWallet()"><i class="fa fa-wallet"></i> Connect wallet</button>
+      <button type="button" class="btn-ghost" onclick="compareBalances()">Compare balances</button>
+      <button type="button" class="btn-ghost" onclick="compareClaims()">Compare claims</button>
+      <button type="button" class="btn-ghost" onclick="runTape()">Build trace</button>
       <div id="balance-compare-results" class="mt-3" hidden>
-        <div>Dashboard Side: <strong id="alpha-balance">---</strong></div>
-        <div>Mainnet Side: <strong id="beta-balance">---</strong></div>
+        <div>Dashboard Side: <strong id="alpha-balance" class="value">---</strong></div>
+        <div>Mainnet Side: <strong id="beta-balance" class="value">---</strong></div>
         <div id="balance-compare-status" class="hint"></div>
       </div>
-      <div id="claim-comparison-tables" class="mt-3"></div>
+      <div id="claim-comparison-tables"></div>
       <div id="compare-claims-status" class="hint"></div>
+      <div id="status" class="hint"></div>
     </div>
   </section>
 
   <section class="pane" data-pane="file" id="mbasestack-utility-token">
     <div class="card">
       <div class="kicker">File</div>
-      <h2>MBSTAC utility token</h2>
-      <p>Symbol: <strong id="contractSymbol">MBSTAC</strong></p>
-      <p id="onchainStatus" class="hint">Reading contract…</p>
-      <p>Smart contract: <span id="topContractAddress">Loading…</span></p>
+      <h2>MBSTAC</h2>
+      <p id="onchainStatus" class="hint">Reading token…</p>
+      <p class="hash" id="topContractAddress">0x89c7B13Dea0Ca0003342F6b3cf8F9ec116EBcd19</p>
       <button type="button" class="btn-ghost" onclick="copyText('topContractAddress')">Copy contract</button>
-      <button type="button" class="btn-mint mt-3" id="connectWalletButton" onclick="connectWallet()">Connect BDAG Dashboard Wallet</button>
-      <p class="mt-2">Connected to: <span id="sourceWalletDisplay" title="">Not connected</span></p>
-      <button type="button" class="btn-ghost" onclick="disconnectWallet()">Disconnect Wallet / Start Over</button>
+      <p>Connected: <span id="sourceWalletDisplay">Not connected</span></p>
+      <button type="button" class="btn-ghost" onclick="disconnectWallet()">Disconnect</button>
+      <div class="mt-3">Token balance <div id="tokenBalance" class="value">---</div></div>
+      <div id="tokenContractAddress" class="hash">0x89c7B13Dea0Ca0003342F6b3cf8F9ec116EBcd19</div>
+      <p class="hint">Mint stays on the official site. Purchase / Bonus are shop figures.</p>
+      <div id="purchaseAmount" hidden></div><div id="bonusAmount" hidden></div><div id="totalAmount" hidden></div>
+      <div id="availableAmount" hidden></div><div id="reportedAmount" hidden></div><div id="claimedAmount" hidden></div>
+      <span id="contractSymbol" hidden>MBSTAC</span>
+      <input id="contactNameHandle" hidden><input id="contactEmail" hidden>
+      <button id="connectWalletButton" hidden></button><button id="claimButton" hidden></button>
     </div>
+  </section>
+
+  <section class="pane" data-pane="miner">
     <div class="card">
-      <h3>Source Amounts</h3>
-      <p class="hint">Purchase / Bonus / Total are Dashboard Side shop figures unless a contract call returns them. This preview will not invent them.</p>
-      <div>Purchase <div id="purchaseAmount" class="value">---</div></div>
-      <div>Bonus <div id="bonusAmount" class="value">---</div></div>
-      <div>Total <div id="totalAmount" class="value">---</div></div>
-      <div>Maximum Available to Mint <div id="availableAmount" class="value">---</div></div>
-      <div id="reportedAmount" hidden></div><div id="claimedAmount" hidden></div>
-    </div>
-    <div class="card">
-      <h3>Contact</h3>
-      <p>Contact us: <span id="contactSupportEmail">contact-mbstac@mbasestack.com</span></p>
-      <input id="contactNameHandle" class="form-control" placeholder="Name or handle">
-      <input id="contactEmail" class="form-control mt-2" type="email" placeholder="you@example.com">
-      <button type="button" class="btn-ghost mt-2" onclick="saveContact()">Save Your Info</button>
-      <div id="contactInfoStatus" class="hint"></div>
-    </div>
-    <div class="card">
-      <h3>Mint</h3>
-      <p>Mint is disabled here. Use the official site.</p>
-      <label><input id="mintCustom" type="radio" name="mintMode" checked> Custom</label>
-      <label class="ms-3"><input id="mintMax" type="radio" name="mintMode"> Maximum</label>
-      <input id="customMintAmount" class="form-control mt-2" placeholder="Amount">
-      <button type="button" class="btn-ghost mt-3" id="claimButton" onclick="claimToken()">Send MBSTAC to my wallet</button>
-      <div id="mintStatus" class="hint" hidden></div>
-      <div class="mt-3">MBSTAC on selected Mainnet Side RPC <div id="tokenBalance" class="value">---</div></div>
-      <div id="tokenContractAddress">Loading…</div>
-      <button type="button" class="btn-ghost mt-2" onclick="copyText('tokenContractAddress')">Copy token contract</button>
-      <div id="status" class="hint"></div>
+      <div class="row-help"><div class="kicker">Miners</div><button type="button" class="q" data-help="help-miner">?</button></div>
+      <div id="help-miner" class="help" hidden>Shop miner prices are list prices from public pages (X1 $1, X10 $10, X30 $30, X100 $100). Type what you actually paid. This stays on your phone. It is not written on the chain unless a later payment hash exists.</div>
+      <h2>Log a miner purchase</h2>
+      <label>Type</label>
+      <select id="minerType" class="form-select">
+        <option value="X1" data-usd="1">X1 — list $1</option>
+        <option value="X10" data-usd="10">X10 — list $10</option>
+        <option value="X30" data-usd="30">X30 — list $30</option>
+        <option value="X100" data-usd="100">X100 — list $100</option>
+        <option value="Other" data-usd="0">Other</option>
+      </select>
+      <div class="miner-row mt-2">
+        <input id="minerQty" class="form-control" type="number" min="1" value="1" placeholder="Qty">
+        <input id="minerUsd" class="form-control" type="number" min="0" step="0.01" placeholder="USD each">
+        <input id="minerDate" class="form-control" type="date">
+      </div>
+      <button type="button" class="btn-mint" onclick="addMiner()">Save miner log</button>
+      <div id="minerList" class="hint"></div>
     </div>
   </section>
 
   <section class="pane" data-pane="lab">
     <div class="card">
-      <div class="kicker">Lab</div>
-      <h2>Number dictionary</h2>
-      <dl class="dict">
-        <dt>Dashboard Side</dt><dd>BDAGScan / BlockDAG Works RPCs in this preview. Shop dates, if any, stay off-chain until you paste a CSV.</dd>
-        <dt>Mainnet Side</dt><dd>CapeDAG, Engineering, DVD, BDAG-US, England, Brazil, DAGCORE and similar public RPCs in this preview.</dd>
-        <dt>Dashboard Total / Bonus</dt><dd>Account figures from the shop site. Not a transaction list.</dd>
-        <dt>Native BDAG</dt><dd>eth_getBalance on the RPC you picked. The two sides can differ after block 316,002.</dd>
-        <dt>MBSTAC</dt><dd>Utility record at 0x89c7…cd19. Not BDAG.</dd>
-      </dl>
-    </div>
-    <div class="card">
-      <h3>Event tape and flow</h3>
-      <p class="hint">Two lanes: Dashboard Side and Mainnet Side. Dotted line = shop data this page does not have.</p>
+      <div class="row-help"><div class="kicker">Trace</div><button type="button" class="q" data-help="help-trace">?</button></div>
+      <div id="help-trace" class="help" hidden>Coloured lines are public logs. Dashed miner box is what you typed. Shop totals stay dashed until you export a dashboard CSV. This is a record, not a verdict.</div>
+      <h2>Wallet trace</h2>
+      <svg id="traceSvg" class="trace" viewBox="0 0 360 260" role="img" aria-label="Trace chart"></svg>
       <div id="flowHost"></div>
-      <div id="tapeHost" class="mt-3"></div>
+      <div id="tapeHost"></div>
       <p id="tapeStatus" class="hint"></p>
       <button type="button" class="btn-mint" onclick="runTape()">Collect tape</button>
-      <button type="button" class="btn-ghost mt-2" onclick="exportFootprint()">Export JSON footprint</button>
-    </div>
-    <div class="card">
-      <h3>Watchlist (this browser only)</h3>
+      <button type="button" class="btn-ghost" onclick="exportFootprint()">Export JSON</button>
+      <canvas id="rpcChart" height="140"></canvas>
+      <p id="chartHint" class="hint"></p>
+      <canvas id="claimChart" height="120"></canvas>
       <div id="watchList"></div>
-    </div>
-    <div class="card">
-      <h3>RPC agreement</h3>
-      <canvas id="rpcChart" height="180"></canvas>
-      <p id="chartHint" class="hint">Connect or Compare Balances to fill this chart.</p>
-    </div>
-    <div class="card">
-      <h3>Claim log counts</h3>
-      <canvas id="claimChart" height="160"></canvas>
     </div>
   </section>
 
   <section class="pane" data-pane="faq">
     <div class="card">
-      <div class="kicker">FAQ</div>
-      <h2>Frequently asked questions</h2>
-      <p>MBSTAC is not BDAG. Mint only on mbasestack.com. Dashboard Side and Mainnet Side are labels used in this preview so the two RPC lists stay distinct. They are not a legal finding.</p>
+      <h2>Help</h2>
+      <p>Tap any <strong>?</strong> for a short explanation. MBSTAC is not BDAG. Mint only on mbasestack.com.</p>
     </div>
   </section>
 </div>
@@ -152,22 +136,21 @@
 <nav class="bottombar">
   <button type="button" class="tab on" data-go="read"><i class="fa fa-code-fork d-block"></i>Read</button>
   <button type="button" class="tab" data-go="file"><i class="fa fa-coins d-block"></i>File</button>
-  <button type="button" class="tab" data-go="lab"><i class="fa fa-bar-chart d-block"></i>Lab</button>
-  <button type="button" class="tab" data-go="faq"><i class="fa fa-question-circle d-block"></i>FAQ</button>
+  <button type="button" class="tab" data-go="miner"><i class="fa fa-microchip d-block"></i>Miners</button>
+  <button type="button" class="tab" data-go="lab"><i class="fa fa-project-diagram d-block"></i>Trace</button>
   <a class="tab text-center text-decoration-none" href="https://mbasestack.com/#mbasestack-utility-token" target="_blank" rel="noopener"><i class="fa fa-external-link d-block"></i>Official</a>
 </nav>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/ethers@6/dist/ethers.umd.min.js"></script>
 <script src="js/labels.js"></script>
 <script src="js/app.js"></script>
 <script src="js/tape.js"></script>
+<script src="js/trace.js"></script>
 <script>
 document.querySelectorAll("[data-jump]").forEach(a => a.addEventListener("click", e => {
   e.preventDefault(); showPane(a.getAttribute("data-jump")); document.getElementById("siteMenu").hidden = true;
 }));
-document.addEventListener("DOMContentLoaded", paintWatch);
 </script>
 </body>
 </html>
