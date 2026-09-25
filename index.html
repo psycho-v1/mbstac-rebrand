@@ -47,6 +47,8 @@
       <button type="button" class="btn-mint mt-3" onclick="connectWallet()"><i class="fa fa-wallet"></i> Connect BDAG Dashboard Wallet</button>
       <button type="button" class="btn-ghost mt-2" onclick="compareBalances()">Compare Balances</button>
       <button type="button" class="btn-ghost mt-2" onclick="compareClaims()">Compare Claims</button>
+      <button type="button" class="btn-ghost mt-2" onclick="runTape()">Build event tape</button>
+      <button type="button" class="btn-ghost mt-2" onclick="saveWatch()">Save address on this device</button>
       <div id="balance-compare-results" class="mt-3" hidden>
         <div>Branch A: <strong id="alpha-balance">---</strong></div>
         <div>Community: <strong id="beta-balance">---</strong></div>
@@ -71,7 +73,7 @@
     </div>
     <div class="card">
       <h3>Source Amounts</h3>
-      <p class="hint">Purchase / Bonus / Total are dashboard figures. They are not stored on the MBSTAC token. This preview will not invent them.</p>
+      <p class="hint">Purchase / Bonus / Total are dashboard figures. This preview will not invent them.</p>
       <div>Purchase <div id="purchaseAmount" class="value">---</div></div>
       <div>Bonus <div id="bonusAmount" class="value">---</div></div>
       <div>Total <div id="totalAmount" class="value">---</div></div>
@@ -104,8 +106,30 @@
   <section class="pane" data-pane="lab">
     <div class="card">
       <div class="kicker">Lab</div>
-      <h2>RPC agreement</h2>
-      <p>Each bar is native BDAG for the same address on one listed endpoint. Spread is sample variance, not a prediction.</p>
+      <h2>Number dictionary</h2>
+      <dl class="dict">
+        <dt>Dashboard Total / Bonus</dt><dd>Off-chain account figures. Not a transaction list.</dd>
+        <dt>Claim screen</dt><dd>What a vesting contract will release now. Often smaller than Total.</dd>
+        <dt>Native BDAG</dt><dd>eth_getBalance on the RPC you picked. History A and history B can differ after block 316,002.</dd>
+        <dt>Vesting events</dt><dd>Public Claim logs on the three known contracts.</dd>
+        <dt>MBSTAC</dt><dd>Utility record at 0x89c7…cd19. Not BDAG. No monetary value on this page.</dd>
+      </dl>
+    </div>
+    <div class="card">
+      <h3>Event tape and flow</h3>
+      <p class="hint">Two lanes after the split. Dotted line = dashboard data this page does not have.</p>
+      <div id="flowHost"></div>
+      <div id="tapeHost" class="mt-3"></div>
+      <p id="tapeStatus" class="hint"></p>
+      <button type="button" class="btn-mint" onclick="runTape()">Collect tape</button>
+      <button type="button" class="btn-ghost mt-2" onclick="exportFootprint()">Export JSON footprint</button>
+    </div>
+    <div class="card">
+      <h3>Watchlist (this browser only)</h3>
+      <div id="watchList"></div>
+    </div>
+    <div class="card">
+      <h3>RPC agreement</h3>
       <canvas id="rpcChart" height="180"></canvas>
       <p id="chartHint" class="hint">Connect or Compare Balances to fill this chart.</p>
     </div>
@@ -119,7 +143,7 @@
     <div class="card">
       <div class="kicker">FAQ</div>
       <h2>Frequently asked questions</h2>
-      <p>MBSTAC is not BDAG and has no monetary value on this page. Mint only on mbasestack.com. Dashboard totals are off-chain. This preview reads public RPCs and the token at 0x89c7B13Dea0Ca0003342F6b3cf8F9ec116EBcd19.</p>
+      <p>MBSTAC is not BDAG. Mint only on mbasestack.com. This preview reads public RPCs and the token contract. It does not reconstruct off-chain presale ledgers.</p>
     </div>
   </section>
 </div>
@@ -136,10 +160,12 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/ethers@6/dist/ethers.umd.min.js"></script>
 <script src="js/app.js"></script>
+<script src="js/tape.js"></script>
 <script>
 document.querySelectorAll("[data-jump]").forEach(a => a.addEventListener("click", e => {
   e.preventDefault(); showPane(a.getAttribute("data-jump")); document.getElementById("siteMenu").hidden = true;
 }));
+document.addEventListener("DOMContentLoaded", paintWatch);
 </script>
 </body>
 </html>
