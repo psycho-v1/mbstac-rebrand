@@ -27,3 +27,10 @@ label{display:block;margin:8px 0 4px;color:var(--muted);font-size:13px}
 .value{font-size:1.15rem;font-weight:800}
 .rpc-health{font-size:12px}.ok{color:#7dffa6}.bad{color:#ff8b9a}.wait{color:#e8c46a}
 #status,.hint{font-size:13px;color:var(--muted);margin-top:8px}
+.dict dt{color:var(--accent);font-weight:700;margin-top:8px}.dict dd{margin:0;color:var(--muted);font-size:13px}
+.flow{display:flex;flex-direction:column;gap:8px;align-items:center}
+.flow .row{display:grid;grid-template-columns:1fr 1fr;gap:8px;width:100%}
+.flow .node{width:100%;border:1px solid var(--line);border-radius:12px;padding:10px;background:#100a18;font-size:13px;text-align:center}
+.flow .node.muted{opacity:.75;border-style:dashed}
+.flow .arrow{color:var(--accent);font-size:11px;letter-spacing:.06em;text-transform:uppercase}
+.flow a{color:#ead7ff}
