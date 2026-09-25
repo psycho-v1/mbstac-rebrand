@@ -3,6 +3,7 @@ const UPDATES = [
   { date: "2026-09-26", title: "LabPoints.sol drafted", body: "Owner-only award of 10 points per diary hash. Participants are not meant to pay gas. Not deployed yet." },
   { date: "2026-09-25", title: "Rebrand preview notice", body: "This GitHub Pages file is a volunteer rebrand. Mint on the official site only." }
 ];
+(function(){ if(!document.querySelector('link[href="css/extra.css"]')){ const l=document.createElement('link'); l.rel='stylesheet'; l.href='css/extra.css'; document.head.appendChild(l);} })();
 function renderUpdates() {
   const host = document.getElementById("updatesList");
   if (!host) return;
