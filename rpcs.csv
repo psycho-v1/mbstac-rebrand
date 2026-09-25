@@ -1,13 +1,11 @@
 name,url,explorer,branch,enabled
-WelshDAG,https://rpc.welshdag.trade,https://explorer.welshdag.trade,beta,True
 CapeDAG,https://rpc.capedag.com,https://explorer.capedag.com,beta,True
 Engineering,https://rpc.blockdag.engineering,https://explorer.blockdag.engineering,beta,True
 DVD Mining,https://rpc.dvdmining.com,https://explorer.dvdmining.com,beta,True
 BDAG-US East,https://rpc.east.bdag-us.org,https://explorer.east.bdag-us.org,beta,True
 BDAG-US West,https://rpc.west.bdag-us.org,https://explorer.west.bdag-us.org,beta,True
-RMS live,https://rms-bdag-rpc.de/api/rpc-live,https://rms-bdag-rpc.de,beta,True
 ENGLAND,https://rpc.england.bdag.us.org,https://explorer.england.bdag.us.org,beta,True
 BRAZIL,https://rpc.brazil.bdag.us.org,https://explorer.brazil.bdag.us.org,beta,True
-Bdag-Us,https://rpc.bdag-us.org,https://explorer.bdag-us.org,beta,True
+DAGCORE - EUROPE,https://rpc.dagcore.net,https://explorer.dagcore.net,beta,True
 BlockDAG Works,https://rpc.blockdag.works,https://explorer.blockdag.works,alpha,True
 BDAGScan,https://rpc.bdagscan.com,https://explorer.bdagscan.com,alpha,True
