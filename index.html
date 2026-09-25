@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>MBSTAC preview</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700&family=IBM+Plex+Mono:wght@700&display=swap" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
@@ -22,33 +21,26 @@
       <a href="#" data-jump="lab">Trace</a>
       <a href="#" data-jump="miner">Miners</a>
       <a href="#" data-jump="diary">My Diary</a>
-      <a href="https://mbasestack.com/#mbasestack-utility-token" target="_blank" rel="noopener">Official site</a>
     </nav>
   </header>
   <div class="notice"><strong>Not the official dApp.</strong> Do not mint here. Use <a href="https://mbasestack.com/#mbasestack-utility-token" target="_blank" rel="noopener">mbasestack.com</a>.</div>
   <section class="pane on" data-pane="read">
     <div class="card">
-      <div class="row-help"><div class="kicker">Read</div><button type="button" class="q" data-help="help-read">?</button></div>
-      <div id="help-read" class="help" hidden>Pick one RPC on each side, then Compare. Figures can differ after block 316,002.</div>
       <h2>Two sides, one address</h2>
       <label>Mainnet Side RPC</label><select id="rpcSelect" class="form-select"></select>
       <div id="rpcHealth" class="hint wait">Checking...</div>
       <label>Dashboard Side RPC</label><select id="alphaRpcSelect" class="form-select"></select>
       <div id="alphaRpcHealth" class="hint wait">Checking...</div>
-    </div>
-    <div class="card">
-      <div class="row-help"><h3 class="m-0">Wallet</h3><button type="button" class="q" data-help="help-wallet">?</button></div>
-      <div id="help-wallet" class="help" hidden>Open this page inside MetaMask, Trust, or Binance Web3 on a phone.</div>
       <label>Address</label>
-      <input id="compare-wallet-address" class="form-control hash" placeholder="0x…" autocomplete="off" spellcheck="false">
-      <div id="walletList" class="wallets"></div>
+      <input id="compare-wallet-address" class="form-control hash" placeholder="0x…">
+      <div id="walletList"></div>
       <button type="button" class="btn-mint" onclick="connectWallet()">Connect wallet</button>
       <button type="button" class="btn-ghost" onclick="compareBalances()">Compare balances</button>
       <button type="button" class="btn-ghost" onclick="compareClaims()">Compare claims</button>
       <button type="button" class="btn-ghost" onclick="runTape()">Build trace</button>
-      <div id="balance-compare-results" class="mt-3" hidden>
-        <div>Dashboard Side: <strong id="alpha-balance" class="value">---</strong></div>
-        <div>Mainnet Side: <strong id="beta-balance" class="value">---</strong></div>
+      <div id="balance-compare-results" hidden>
+        <div>Dashboard Side: <strong id="alpha-balance">---</strong></div>
+        <div>Mainnet Side: <strong id="beta-balance">---</strong></div>
         <div id="balance-compare-status" class="hint"></div>
       </div>
       <div id="claim-comparison-tables"></div><div id="compare-claims-status" class="hint"></div><div id="status" class="hint"></div>
@@ -56,43 +48,29 @@
   </section>
   <section class="pane" data-pane="file" id="mbasestack-utility-token">
     <div class="card">
-      <div class="kicker">File</div><h2>MBSTAC</h2>
-      <p id="onchainStatus" class="hint">Reading token…</p>
+      <h2>MBSTAC</h2>
+      <p id="onchainStatus" class="hint"></p>
       <p class="hash" id="topContractAddress">0x89c7B13Dea0Ca0003342F6b3cf8F9ec116EBcd19</p>
-      <button type="button" class="btn-ghost" onclick="copyText('topContractAddress')">Copy contract</button>
       <p>Connected: <span id="sourceWalletDisplay">Not connected</span></p>
       <button type="button" class="btn-ghost" onclick="disconnectWallet()">Disconnect</button>
-      <div class="mt-3">Token balance <div id="tokenBalance" class="value">---</div></div>
+      <div id="tokenBalance" class="value">---</div>
       <div id="tokenContractAddress" class="hash">0x89c7B13Dea0Ca0003342F6b3cf8F9ec116EBcd19</div>
       <div id="purchaseAmount" hidden></div><div id="bonusAmount" hidden></div><div id="totalAmount" hidden></div>
       <div id="availableAmount" hidden></div><div id="reportedAmount" hidden></div><div id="claimedAmount" hidden></div>
-      <span id="contractSymbol" hidden>MBSTAC</span>
+      <span id="contractSymbol" hidden></span>
       <input id="contactNameHandle" hidden><input id="contactEmail" hidden>
       <button id="connectWalletButton" hidden></button><button id="claimButton" hidden></button>
     </div>
   </section>
-  <section class="pane" data-pane="miner">
-    <div class="card">
-      <h2>Quick miner log</h2>
-      <select id="minerType" class="form-select"><option value="X1" data-usd="1">X1</option><option value="X10" data-usd="10">X10</option><option value="X30" data-usd="30">X30</option><option value="X100" data-usd="100">X100</option></select>
-      <input id="minerQty" class="form-control mt-2" type="number" value="1">
-      <input id="minerUsd" class="form-control mt-2" placeholder="USD each">
-      <input id="minerDate" class="form-control mt-2" type="date">
-      <button type="button" class="btn-mint" onclick="addMiner()">Save</button>
-      <div id="minerList" class="hint"></div>
-      <p class="hint">Use My Diary for hashes and several miners.</p>
-    </div>
-  </section>
+  <section class="pane" data-pane="miner"><div class="card"><h2>Miners</h2><p class="hint">Use Diary for several miners and hashes.</p><div id="minerList"></div></div></section>
   <section class="pane" data-pane="lab">
     <div class="card">
-      <h2>Wallet trace</h2>
+      <h2>Trace</h2>
       <svg id="traceSvg" class="trace" viewBox="0 0 360 260"></svg>
-      <div id="flowHost"></div><div id="tapeHost"></div>
-      <p id="tapeStatus" class="hint"></p>
+      <div id="flowHost"></div><div id="tapeHost"></div><p id="tapeStatus" class="hint"></p>
       <button type="button" class="btn-mint" onclick="runTape()">Collect tape</button>
-      <button type="button" class="btn-ghost" onclick="exportFootprint()">Export JSON</button>
-      <canvas id="rpcChart" height="140"></canvas><p id="chartHint" class="hint"></p>
-      <canvas id="claimChart" height="120"></canvas><div id="watchList"></div>
+      <canvas id="rpcChart" height="120"></canvas><p id="chartHint" class="hint"></p>
+      <canvas id="claimChart" height="100"></canvas><div id="watchList"></div>
     </div>
   </section>
 </div>
@@ -105,12 +83,12 @@
 </nav>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/ethers@6/dist/ethers.umd.min.js"></script>
-<script src="js/labels.js"></script>
 <script src="js/app.js"></script>
 <script src="js/tape.js"></script>
 <script src="js/trace.js"></script>
 <script src="js/diary.js"></script>
 <script src="js/diary-ui.js"></script>
+<script src="js/all-wallets.js"></script>
 <script>
 document.querySelectorAll("[data-jump]").forEach(a => a.addEventListener("click", e => {
   e.preventDefault(); showPane(a.getAttribute("data-jump")); document.getElementById("siteMenu").hidden = true;
