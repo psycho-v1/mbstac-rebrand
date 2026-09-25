@@ -3,93 +3,74 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>MBaseStack</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700&family=IBM+Plex+Mono:wght@700&display=swap" rel="stylesheet">
+<title>MBaseStack Lab</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700&family=IBM+Plex+Mono:wght@600&display=swap" rel="stylesheet">
 <link href="css/app.css" rel="stylesheet">
 </head>
 <body>
 <div class="app">
   <header class="topbar">
     <a class="brand" href="index.html"><span class="mark">M</span><div><strong>MBaseStack</strong><small>Independent community dApp</small></div></a>
-    <a class="official" href="https://mbasestack.com/#mbasestack-utility-token" target="_blank" rel="noopener">Official site</a>
+    <a class="official" href="https://mbasestack.com/#mbasestack-utility-token" target="_blank" rel="noopener">Official</a>
   </header>
-  <div class="notice">Not an official BlockDAG product. This preview is a methods build by psycho-v1 with MBasestack. Do not mint here. Volunteer reports are incomplete. Community estimates are not official totals.</div>
+  <div class="notice">Not an official BlockDAG product. Volunteer file. Incomplete by design. Do not mint here.</div>
 
   <section class="pane on" data-pane="mine">
     <div class="card">
       <div class="kicker">My MBaseStack</div>
-      <h2>MBSTAC utility token</h2>
-      <p class="hint">Token <span class="hash" id="topContractAddress">0x89c7B13Dea0Ca0003342F6b3cf8F9ec116EBcd19</span></p>
-      <p id="onchainStatus" class="hint">Reading contract…</p>
+      <h2>MBSTAC</h2>
+      <p class="hash" id="topContractAddress">0x89c7B13Dea0Ca0003342F6b3cf8F9ec116EBcd19</p>
+      <p id="onchainStatus" class="hint"></p>
       <button type="button" class="btn-mint" onclick="connectWallet()">Connect wallet</button>
       <p>Connected: <span id="sourceWalletDisplay">Not connected</span></p>
-      <div>MBSTAC balance <div id="tokenBalance" class="value">---</div></div>
-      <p class="hint">Mint stays on the official signer. This page only reads the contract. No BDAG is spent when you save a diary.</p>
-      <button type="button" class="btn-ghost" onclick="claimToken()">Open official mint</button>
-      <div id="mintStatus" class="hint" hidden></div>
+      <div id="tokenBalance" class="value">---</div>
+      <button type="button" class="btn-ghost" onclick="claimToken()">Official mint</button>
+      <select id="rpcSelect" class="form-select mt-2"></select>
+      <select id="alphaRpcSelect" class="form-select mt-2"></select>
       <div id="status" class="hint"></div>
-      <div id="tokenContractAddress" class="hash">0x89c7B13Dea0Ca0003342F6b3cf8F9ec116EBcd19</div>
-      <select id="rpcSelect" class="form-select"></select><div id="rpcHealth" class="hint"></div>
-      <select id="alphaRpcSelect" class="form-select"></select><div id="alphaRpcHealth" class="hint"></div>
+      <div id="tokenContractAddress" hidden>0x89c7B13Dea0Ca0003342F6b3cf8F9ec116EBcd19</div>
     </div>
   </section>
 
   <section class="pane" data-pane="diary">
     <div class="card">
       <div class="kicker">My BlockDAG / BDAG Diary</div>
-      <h2>Story</h2>
-      <p class="hint">Events in date order. Amounts keep their history label. They are not added together.</p>
-      <div id="story" class="story"></div>
+      <div class="progress mb-3" style="height:8px"><div id="bar" class="progress-bar" style="width:8%;background:#7ee7ff"></div></div>
+      <p class="hint" id="stepHint">Chapter 1</p>
+      <div id="chapter"></div>
+      <div class="d-flex gap-2 mt-3">
+        <button type="button" class="btn-ghost" id="backBtn">Back</button>
+        <button type="button" class="btn-mint" id="nextBtn">Continue</button>
+      </div>
+      <p id="diaryStatus" class="hint"></p>
     </div>
     <div class="card">
-      <h2>Fill or edit</h2>
-      <p class="hint">Select only what applies. Empty boxes do not write zeros. Sensitive IDs are hashed on this device.</p>
-      <label class="chk"><input type="checkbox" id="consent"> I understand this file is voluntary and incomplete.</label>
-      <label>Reporting wallet</label>
-      <input id="compare-wallet-address" class="form-control hash" placeholder="0x…">
-      <button type="button" class="btn-ghost" onclick="connectWallet()">Use connected wallet</button>
-      <h3>A–E programs</h3>
-      <label class="chk"><input type="checkbox" id="famA"> A. Paid Legacy / New / presale / aftersale</label>
-      <label class="chk"><input type="checkbox" id="famB"> B. Referral or grant coins</label>
-      <label class="chk"><input type="checkbox" id="famC"> C. Buyback, swap, dashboard USDT, claim</label>
-      <label class="chk"><input type="checkbox" id="famD"> D. X1, Telegram tap, or X10/X30/X100</label>
-      <label class="chk"><input type="checkbox" id="famE"> E. Other apps (exchange, staking, casino, card)</label>
-      <h3>Stuck-value modules</h3>
-      <label class="chk"><input type="checkbox" id="modE1"> E1. Exchange credit I cannot withdraw</label>
-      <label class="chk"><input type="checkbox" id="modE2"> E2. Wallet stock an exchange will not take</label>
-      <label class="chk"><input type="checkbox" id="modE3"> E3. Unclaimed vesting remainder</label>
-      <label class="chk"><input type="checkbox" id="modE4"> E4. Dashboard figure I cannot move</label>
-      <div id="modules"></div>
-      <h3>E5 last — attitude only</h3>
-      <select id="e5" class="form-select">
-        <option value="">I will answer later</option>
-        <option value="community_peer_connected">Community / peer-connected history</option>
-        <option value="bdagscan_rpc">bdagscan RPC history</option>
-        <option value="both_are_real_and_incompatible">Both real and incompatible</option>
-        <option value="neither_is_what_I_was_sold">Neither is what I was sold</option>
-        <option value="do_not_know">I do not know</option>
-      </select>
-      <button type="button" class="btn-mint" onclick="saveDiarySurvey()">Save diary (no gas)</button>
-      <p id="diaryStatus" class="hint"></p>
-      <p>Lab points on this device: <strong id="labPoints">0</strong> / 10 when the diary is complete.</p>
+      <h2>Your story so far</h2>
+      <div id="story" class="story"></div>
+      <div id="editList"></div>
     </div>
   </section>
 
   <section class="pane" data-pane="lab">
     <div class="card">
       <div class="kicker">MBaseStack Lab</div>
-      <h2>Your individual report</h2>
-      <p class="hint">Built from your diary plus dual-RPC reads when an address exists. Immobilisation is not recorded as a spend without a hash.</p>
+      <h2>Your report</h2>
+      <p class="hint">Among the rows you attested. Dual-RPC pair if an address exists.</p>
       <div id="indivReport"></div>
-      <button type="button" class="btn-ghost" onclick="buildIndividual()">Refresh my report</button>
+      <canvas id="meChart" height="180"></canvas>
     </div>
     <div class="card">
       <h2>Public Surface A</h2>
-      <p class="hint">Among wallets that reported in this preview file. Not an official BlockDAG total. No combined loss headline.</p>
+      <p class="hint">Among wallets in this preview file. Not an official BlockDAG total.</p>
       <div id="publicA"></div>
-      <h2>Surface C (scenario only)</h2>
-      <p class="hint">T-hat(N,c) is a fan, not a headline. Default off until more than one independent reporter file exists. This preview shows the formula on your observed cash only.</p>
+      <canvas id="aChart" height="180"></canvas>
+      <h2 class="mt-3">Surface C scenario fan</h2>
+      <p class="hint">T-hat(N,c)=T_obs+(N-n)·c·x-bar. Community scenario range. Not an official total.</p>
       <div id="publicC"></div>
+      <canvas id="cChart" height="180"></canvas>
+      <p>Lab points: <strong id="labPoints">0</strong></p>
     </div>
   </section>
 </div>
@@ -98,6 +79,9 @@
   <button type="button" class="tab" data-go="diary">Diary</button>
   <button type="button" class="tab" data-go="lab">Lab</button>
 </nav>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/ethers@6/dist/ethers.umd.min.js"></script>
 <script src="js/mbase.js"></script>
+<script src="js/survey.js"></script>
 </body></html>
