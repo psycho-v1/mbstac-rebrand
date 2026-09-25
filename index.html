@@ -12,14 +12,12 @@
 <body>
 <div class="app position-relative">
   <header class="topbar">
-    <a class="brand" href="index.html">
-      <span class="mark">M</span>
-      <div><strong>MBSTAC</strong><small>Rebrand preview</small></div>
-    </a>
+    <a class="brand" href="index.html"><span class="mark">M</span><div><strong>MBSTAC</strong><small>Rebrand preview</small></div></a>
     <button type="button" class="icon-btn" id="siteMenuBtn" aria-label="Menu"><i class="fa fa-bars"></i></button>
     <nav id="siteMenu" class="menu" hidden>
       <a href="#" data-jump="read"><i class="fa fa-code-fork"></i> Read</a>
-      <a href="#" data-jump="file"><i class="fa fa-coins"></i> File / mint</a>
+      <a href="#" data-jump="file"><i class="fa fa-coins"></i> File</a>
+      <a href="#" data-jump="lab"><i class="fa fa-bar-chart"></i> Lab</a>
       <a href="#" data-jump="faq"><i class="fa fa-question-circle"></i> FAQ</a>
       <a href="https://mbasestack.com/#mbasestack-utility-token" target="_blank" rel="noopener"><i class="fa fa-external-link"></i> Official site</a>
     </nav>
@@ -27,17 +25,14 @@
 
   <div class="notice">
     <strong>This is not the official dApp.</strong>
-    This repository is a layout and coordination test maintained by psycho-v1 with the operator of MBSTAC.
-    Do not connect a funded wallet or mint from this page.
-    Use the live service only at <a href="https://mbasestack.com/#mbasestack-utility-token" target="_blank" rel="noopener">mbasestack.com</a>.
-    When tests are finished, any accepted work will appear on that site.
+    Layout test by psycho-v1 with the MBSTAC operator.
+    Do not mint from this page. Live service: <a href="https://mbasestack.com/#mbasestack-utility-token" target="_blank" rel="noopener">mbasestack.com</a>.
   </div>
 
   <section class="pane on" data-pane="read">
     <div class="card">
       <div class="kicker">Read</div>
       <h2>Compare both Chain 1404 histories</h2>
-      <p class="mb-3">Community Branch and Branch A still report chain ID 1404. Figures below are the RPC you select, at the time you press Compare.</p>
       <label>Community Branch RPC</label>
       <select id="rpcSelect" class="form-select"></select>
       <div id="rpcHealth" class="rpc-health wait">Checking...</div>
@@ -65,49 +60,58 @@
   <section class="pane" data-pane="file" id="mbasestack-utility-token">
     <div class="card">
       <div class="kicker">File</div>
-      <h2 id="contractHeading">MBSTAC utility token</h2>
+      <h2>MBSTAC utility token</h2>
       <p>Symbol: <strong id="contractSymbol">MBSTAC</strong></p>
-      <p>MBSTAC records the uncompressed Total and Bonus shown on a BlockDAG dashboard. It is not BDAG and it does not currently have a monetary value.</p>
-      <p>Smart contract: <span id="topContractAddress">Loading…</span>
-        <button type="button" class="btn-ghost mt-2" onclick="copyText('topContractAddress')">Copy contract</button></p>
-      <p>Set your active wallet to your BDAG Dashboard Wallet address.</p>
-      <button type="button" class="btn-mint" id="connectWalletButton" onclick="connectWallet()">Connect BDAG Dashboard Wallet</button>
+      <p id="onchainStatus" class="hint">Reading contract…</p>
+      <p>Smart contract: <span id="topContractAddress">Loading…</span></p>
+      <button type="button" class="btn-ghost" onclick="copyText('topContractAddress')">Copy contract</button>
+      <button type="button" class="btn-mint mt-3" id="connectWalletButton" onclick="connectWallet()">Connect BDAG Dashboard Wallet</button>
       <p class="mt-2">Connected to: <span id="sourceWalletDisplay" title="">Not connected</span></p>
       <button type="button" class="btn-ghost" onclick="disconnectWallet()">Disconnect Wallet / Start Over</button>
     </div>
     <div class="card">
       <h3>Source Amounts</h3>
+      <p class="hint">Purchase / Bonus / Total are dashboard figures. They are not stored on the MBSTAC token. This preview will not invent them.</p>
       <div>Purchase <div id="purchaseAmount" class="value">---</div></div>
       <div>Bonus <div id="bonusAmount" class="value">---</div></div>
       <div>Total <div id="totalAmount" class="value">---</div></div>
-      <div class="mt-2">Maximum Cumulative Token Amount <div id="reportedAmount" class="value">---</div></div>
-      <div>Previously minted <div id="claimedAmount" class="value">---</div></div>
       <div>Maximum Available to Mint <div id="availableAmount" class="value">---</div></div>
+      <div id="reportedAmount" hidden></div><div id="claimedAmount" hidden></div>
     </div>
     <div class="card">
-      <h3>Contact Us / Your Info</h3>
-      <p>Email is used only for claim support and service notices. It is not sold.</p>
-      <p>Contact us: <span id="contactSupportEmail">Loading…</span></p>
-      <label>Name or Handle</label>
-      <input id="contactNameHandle" class="form-control" placeholder="Optional">
-      <label>Email</label>
-      <input id="contactEmail" class="form-control" type="email" placeholder="you@example.com">
-      <button type="button" class="btn-mint mt-3" onclick="saveContact()">Save Your Info</button>
+      <h3>Contact</h3>
+      <p>Contact us: <span id="contactSupportEmail">contact-mbstac@mbasestack.com</span></p>
+      <input id="contactNameHandle" class="form-control" placeholder="Name or handle">
+      <input id="contactEmail" class="form-control mt-2" type="email" placeholder="you@example.com">
+      <button type="button" class="btn-ghost mt-2" onclick="saveContact()">Save Your Info</button>
       <div id="contactInfoStatus" class="hint"></div>
     </div>
     <div class="card">
-      <h3>Mint and Claim MBSTAC</h3>
-      <p>Mint is disabled on this preview. Use the official site when you are ready to file a record.</p>
-      <label><input id="mintCustom" type="radio" name="mintMode" checked> Custom amount</label>
-      <label class="ms-3"><input id="mintMax" type="radio" name="mintMode"> Maximum available</label>
-      <input id="customMintAmount" class="form-control mt-2" placeholder="Enter token amount">
+      <h3>Mint</h3>
+      <p>Mint is disabled here. Use the official site.</p>
+      <label><input id="mintCustom" type="radio" name="mintMode" checked> Custom</label>
+      <label class="ms-3"><input id="mintMax" type="radio" name="mintMode"> Maximum</label>
+      <input id="customMintAmount" class="form-control mt-2" placeholder="Amount">
       <button type="button" class="btn-ghost mt-3" id="claimButton" onclick="claimToken()">Send MBSTAC to my wallet</button>
       <div id="mintStatus" class="hint" hidden></div>
-      <div class="mt-3">MBaseStack Balance <div id="tokenBalance" class="value">---</div></div>
-      <p class="hint">If the token does not appear in a wallet, add it on chain 1404 with this contract:</p>
+      <div class="mt-3">MBSTAC on selected Community RPC <div id="tokenBalance" class="value">---</div></div>
       <div id="tokenContractAddress">Loading…</div>
       <button type="button" class="btn-ghost mt-2" onclick="copyText('tokenContractAddress')">Copy token contract</button>
       <div id="status" class="hint"></div>
+    </div>
+  </section>
+
+  <section class="pane" data-pane="lab">
+    <div class="card">
+      <div class="kicker">Lab</div>
+      <h2>RPC agreement</h2>
+      <p>Each bar is native BDAG for the same address on one listed endpoint. Spread is sample variance, not a prediction.</p>
+      <canvas id="rpcChart" height="180"></canvas>
+      <p id="chartHint" class="hint">Connect or Compare Balances to fill this chart.</p>
+    </div>
+    <div class="card">
+      <h3>Claim log counts</h3>
+      <canvas id="claimChart" height="160"></canvas>
     </div>
   </section>
 
@@ -115,14 +119,7 @@
     <div class="card">
       <div class="kicker">FAQ</div>
       <h2>Frequently asked questions</h2>
-      <h3>How is the MBSTAC utility token useful?</h3>
-      <p>MBSTAC is not BDAG. It records uncompressed dashboard purchase and bonus as tokens. A wallet cannot mint more than that combined figure. MBSTAC does not currently have a monetary value.</p>
-      <h3>How long will minting remain available?</h3>
-      <p>Dashboard totals are not stored on-chain. MBSTAC exists to keep a permanent record of those two figures. Duration of the official mint window is set by the operator of mbasestack.com.</p>
-      <h3>How can the contract be reviewed?</h3>
-      <p>Copy the contract address from the official site and inspect the verified source, or ask an independent reviewer what the contract can and cannot do.</p>
-      <h3>Can the procedure be tested first?</h3>
-      <p>On the official site, yes: mint a small custom amount before the remainder. Do not use this repository for that test.</p>
+      <p>MBSTAC is not BDAG and has no monetary value on this page. Mint only on mbasestack.com. Dashboard totals are off-chain. This preview reads public RPCs and the token at 0x89c7B13Dea0Ca0003342F6b3cf8F9ec116EBcd19.</p>
     </div>
   </section>
 </div>
@@ -130,12 +127,13 @@
 <nav class="bottombar">
   <button type="button" class="tab on" data-go="read"><i class="fa fa-code-fork d-block"></i>Read</button>
   <button type="button" class="tab" data-go="file"><i class="fa fa-coins d-block"></i>File</button>
+  <button type="button" class="tab" data-go="lab"><i class="fa fa-bar-chart d-block"></i>Lab</button>
   <button type="button" class="tab" data-go="faq"><i class="fa fa-question-circle d-block"></i>FAQ</button>
   <a class="tab text-center text-decoration-none" href="https://mbasestack.com/#mbasestack-utility-token" target="_blank" rel="noopener"><i class="fa fa-external-link d-block"></i>Official</a>
-  <button type="button" class="tab" onclick="document.getElementById('siteMenuBtn').click()"><i class="fa fa-bars d-block"></i>Menu</button>
 </nav>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/ethers@6/dist/ethers.umd.min.js"></script>
 <script src="js/app.js"></script>
 <script>
